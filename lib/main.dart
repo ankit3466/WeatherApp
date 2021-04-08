@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         ),
         body: BlocProvider(
           create: (context) => WeatherBloc(WeatherRepo()),
-          child: weather(),
+          child: WeatherScreen(),
         ),
       ),
       theme: ThemeData(primaryColor: Colors.blue[100]),

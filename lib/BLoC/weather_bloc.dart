@@ -15,25 +15,25 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   @override
   Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
     if (event is GetWeatherEvent) {
-      print("Inside event");
+      //print("Inside event");
       yield WeatherLodingState();
       try {
-        print("Inside try");
+        //print("Inside try");
         final weather = await weatherrepo.getWeather(event.city);
-        print("Inside weather");
+        //print("Inside weather");
         yield WeatherLoadedState(weather);
       } catch (error) {
-        print("Error, $error");
+        //print("Error, $error");
         yield WeatherFailureState(error);
       }
     } else if (event is GetCurrentLocationWeatherEvent) {
-      print("Inside Location");
+      //print("Inside Location");
       yield WeatherLodingState();
       try {
-        print("Inside loc try");
+        //print("Inside loc try");
         final WeatherModel weather =
             await weatherrepo.getCurrentLocationWeather();
-        print("Weather");
+        //print("Weather");
         yield WeatherLoadedState(weather);
       } catch (error) {
         //print(error);

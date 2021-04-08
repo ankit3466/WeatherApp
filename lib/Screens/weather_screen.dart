@@ -28,7 +28,6 @@ class ShowWeatherInfo extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    // mainAxisSize: MainAxisSize.min,
                     children: [
                       FittedBox(
                         child: Text(
@@ -110,7 +109,7 @@ class ShowWeatherInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    //Size size = MediaQuery.of(context).size;
     bool isLandScape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return isLandScape

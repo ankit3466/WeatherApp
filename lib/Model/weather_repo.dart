@@ -11,14 +11,17 @@ class WeatherRepo {
     var url =
         "https://api.openweathermap.org/data/2.5/weather?q=$cityName&units=metric&appid=$API_KEY";
     print("before fatching");
-    var response = await http.get(url);
-    print(response.statusCode);
-    if (response.statusCode != 200) {
-      throw ServiceException(
-          "No matching Location found. Please provide the right city name to search weather.");
+    try {
+      var response = await http.get(url);
+      if (response.statusCode != 200) {
+        throw ServiceException(
+            "No matching Location found. Please provide the right city name to search weather.");
+      }
+      return getdatafromjson(response.body);
+    } catch (e) {
+      throw InternetException(
+          "Unknown Error! Check your Internet Connection !!");
     }
-
-    return parsedJson(response.body);
   }
 
   Future<Position> getLocation() async {
@@ -43,7 +46,7 @@ class WeatherRepo {
         }
       }
     } else {
-      throw PermissionDeniedPermanently("Please enable GPS of the device.");
+      throw MobilePermissionException("Please enable GPS of the device.");
     }
   }
 
@@ -51,15 +54,21 @@ class WeatherRepo {
     Position pos = await getLocation();
     var url =
         "https://api.openweathermap.org/data/2.5/weather?lat=${pos.latitude}&lon=${pos.longitude}&units=metric&appid=$API_KEY";
-    var response = await http.get(url);
-    if (response.statusCode != 200) {
-      throw Exception("Serice is not available");
-    }
 
-    return parsedJson(response.body);
+    try {
+      var response = await http.get(url);
+      if (response.statusCode != 200) {
+        throw ServiceException(
+            "No matching Location found. Please provide the right city name to search weather.");
+      }
+      return getdatafromjson(response.body);
+    } catch (e) {
+      throw InternetException(
+          "Unknown Error! Check your Internet Connection !!");
+    }
   }
 
-  WeatherModel parsedJson(final response) {
+  WeatherModel getdatafromjson(final response) {
     final jsondecoded = json.decode(response) as Map<String, dynamic>;
 
     return WeatherModel.fromJson(jsondecoded);

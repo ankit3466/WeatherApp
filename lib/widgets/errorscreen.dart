@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-class TextWithButton extends StatelessWidget {
+class ErrorScreen extends StatelessWidget {
   final text;
-  final style;
-  final handler;
+  final blocfunction;
   final error;
 
-  TextWithButton({
+  ErrorScreen({
     @required this.text,
-    this.style = const TextStyle(fontSize: 16),
-    this.handler,
+    @required this.blocfunction,
     @required this.error,
   });
 
@@ -42,13 +40,13 @@ class TextWithButton extends StatelessWidget {
                   style: TextStyle(fontSize: 25),
                 ),
                 textColor: Colors.blue,
-                onPressed: handler,
+                onPressed: blocfunction,
               ),
               if (error == "AppSetting")
                 TextButton(
                   onPressed: () async {
                     await Geolocator.openAppSettings();
-                    handler();
+                    blocfunction();
                   },
                   child: Text("Open Setting",
                       style: TextStyle(fontSize: 25, color: Colors.blue)),
@@ -69,7 +67,7 @@ class TextWithButton extends StatelessWidget {
             width: double.infinity,
             height: 50,
             child: FlatButton(
-              onPressed: handler,
+              onPressed: blocfunction,
               color: Colors.lightBlue,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

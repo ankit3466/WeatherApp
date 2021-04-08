@@ -5,7 +5,6 @@ class ServiceException extends LocationException {
   ServiceException(this.message);
   @override
   String toString() {
-    if (message == null) return "Service is not enabled.";
     return "$message";
   }
 }
@@ -15,17 +14,24 @@ class PermissionDenied extends LocationException {
   PermissionDenied(this.message);
   @override
   String toString() {
-    if (message == null) return "Service is not enabled.";
     return "$message";
   }
 }
 
-class PermissionDeniedPermanently extends LocationException {
+class MobilePermissionException extends LocationException {
   final String message;
-  PermissionDeniedPermanently(this.message);
+  MobilePermissionException(this.message);
   @override
   String toString() {
-    if (message == null) return "Service is not enabled.";
+    return "$message";
+  }
+}
+
+class InternetException extends LocationException {
+  final String message;
+  InternetException(this.message);
+  @override
+  String toString() {
     return "$message";
   }
 }

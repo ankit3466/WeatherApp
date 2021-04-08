@@ -6,23 +6,18 @@ import 'package:weather_app/BLoC/weather_bloc.dart';
 import 'package:weather_app/BLoC/weather_event.dart';
 import 'package:weather_app/BLoC/weather_state.dart';
 import 'package:weather_app/widgets/weatherloading.dart';
-import 'package:weather_app/widgets/textbutton.dart';
+import 'package:weather_app/widgets/errorscreen.dart';
 import 'package:weather_app/Screens/weather_screen.dart';
 import 'package:weather_app/widgets/snackbar.dart';
 import 'package:weather_app/LocationUtils/Exceptions.dart';
 
-class weather extends StatefulWidget {
+class WeatherScreen extends StatefulWidget {
   @override
-  _weatherState createState() => _weatherState();
+  _WeatherScreenState createState() => _WeatherScreenState();
 }
 
-class _weatherState extends State<weather> {
+class _WeatherScreenState extends State<WeatherScreen> {
   final textController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +99,6 @@ class _weatherState extends State<weather> {
                             borderRadius: new BorderRadius.circular(30.0)),
                         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                         color: Colors.blue,
-                        //hoverColor: Colors.yellowAccent,
                         icon: Icon(
                           Icons.location_searching,
                           color: Colors.white,
@@ -126,40 +120,36 @@ class _weatherState extends State<weather> {
             ),
           );
         } else if (state is WeatherLodingState) {
-          return CenterCircularProgressIndicator();
+          return CircularIndicator();
         } else if (state is WeatherLoadedState) {
-          return ShowWeatherInfo(state.getweather);
+          return ShowWeatherInfo(state.weather);
         } else if (state is WeatherFailureState) {
           if (state.error.runtimeType == PermissionDenied) {
-            return TextWithButton(
+            return ErrorScreen(
               text: state.error.toString(),
-              style: TextStyle(fontSize: 30),
-              handler: () => BlocProvider.of<WeatherBloc>(context)
+              blocfunction: () => BlocProvider.of<WeatherBloc>(context)
                   .add(ResetWeatherEvent()),
               error: "AppSetting",
             );
-          } else if (state.error.runtimeType == PermissionDeniedPermanently) {
-            return TextWithButton(
+          } else if (state.error.runtimeType == MobilePermissionException) {
+            return ErrorScreen(
               text: state.error.toString(),
-              style: TextStyle(fontSize: 30),
-              handler: () => BlocProvider.of<WeatherBloc>(context)
+              blocfunction: () => BlocProvider.of<WeatherBloc>(context)
                   .add(ResetWeatherEvent()),
               error: "LocationSetting",
             );
           } else if (state.error.runtimeType == ServiceException) {
-            return TextWithButton(
+            return ErrorScreen(
               text: state.error.toString(),
-              style: TextStyle(fontSize: 30),
-              handler: () => BlocProvider.of<WeatherBloc>(context)
+              blocfunction: () => BlocProvider.of<WeatherBloc>(context)
                   .add(ResetWeatherEvent()),
               error: "",
             );
           } else {
             //ShowsnackBar(context);
-            return TextWithButton(
-              text: "Unknown Error! Check your Internet Connection !!",
-              style: TextStyle(fontSize: 30),
-              handler: () => BlocProvider.of<WeatherBloc>(context)
+            return ErrorScreen(
+              text: state.error.toString(),
+              blocfunction: () => BlocProvider.of<WeatherBloc>(context)
                   .add(ResetWeatherEvent()),
               error: "",
             );
